@@ -1,0 +1,23 @@
+# Visual Studio Code
+.vscode/
+
+# Build output
+bin/
+obj/
+
+# User-specific files
+*.user
+*.suo
+
+# Logs
+*.log
+
+# Environment/secrets
+.env
+.env.*
+
+# Operating system files
+.DS_Store
+Thumbs.db
+# Visual Studio
+.vs/
