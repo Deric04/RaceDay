@@ -203,3 +203,13 @@ CREATE TABLE Enrolments
         CHECK (EnrolmentStatus IN ('Pending', 'Confirmed', 'Cancelled'))
 );
 GO
+/* ============================================================
+   SAMPLE DATA - ORGANISERS
+   ============================================================ */
+
+INSERT INTO Organisers
+    (FirstName, LastName, Email, PasswordHash)
+VALUES
+    ('Sarah', 'Mokoena', 'sarah.mokoena@raceday.com', 'HASH_SARAH_123'),
+    ('James', 'Naidoo', 'james.naidoo@raceday.com', 'HASH_JAMES_123');
+GO
