@@ -1,0 +1,36 @@
+name: RaceDay CI
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify project structure
+        run: |
+          test -f README.md
+          test -f docs/ERD.md
+          test -f docs/API-Endpoint-Plan.md
+          test -f docs/RaceDay.sql
+          test -f .github/workflows/ci.yml
+
+      - name: Validate SQL script exists
+        run: |
+          test -s docs/RaceDay.sql
+
+      - name: Validate documentation
+        run: |
+          test -s docs/ERD.md
+          test -s docs/API-Endpoint-Plan.md
+
+      - name: Build successful
+        run: echo "RaceDay CI validation completed successfully."
