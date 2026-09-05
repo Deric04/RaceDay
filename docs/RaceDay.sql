@@ -279,3 +279,15 @@ VALUES
     (3, 3, 250.00, 300),
     (3, 4, 350.00, 200);
 GO
+/* ============================================================
+   SAMPLE DATA - ENROLMENTS
+   ============================================================ */
+
+INSERT INTO Enrolments
+    (ParticipantID, EventCategoryID, EnrolmentStatus)
+VALUES
+    (1, 1, 'Confirmed'),
+    (1, 2, 'Confirmed'),
+    (2, 3, 'Confirmed'),
+    (2, 5, 'Pending');
+GO
