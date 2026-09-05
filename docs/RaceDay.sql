@@ -173,3 +173,33 @@ CREATE TABLE EventCategories
         CHECK (MaximumEntries > 0)
 );
 GO
+/* ============================================================
+   7. ENROLMENTS
+   ============================================================ */
+
+CREATE TABLE Enrolments
+(
+    EnrolmentID INT IDENTITY(1,1) NOT NULL,
+    ParticipantID INT NOT NULL,
+    EventCategoryID INT NOT NULL,
+    EnrolmentDate DATETIME2 NOT NULL DEFAULT GETDATE(),
+    EnrolmentStatus NVARCHAR(30) NOT NULL DEFAULT 'Confirmed',
+
+    CONSTRAINT PK_Enrolments
+        PRIMARY KEY (EnrolmentID),
+
+    CONSTRAINT FK_Enrolments_Participants
+        FOREIGN KEY (ParticipantID)
+        REFERENCES Participants(ParticipantID),
+
+    CONSTRAINT FK_Enrolments_EventCategories
+        FOREIGN KEY (EventCategoryID)
+        REFERENCES EventCategories(EventCategoryID),
+
+    CONSTRAINT UQ_Enrolments
+        UNIQUE (ParticipantID, EventCategoryID),
+
+    CONSTRAINT CK_Enrolments_Status
+        CHECK (EnrolmentStatus IN ('Pending', 'Confirmed', 'Cancelled'))
+);
+GO
