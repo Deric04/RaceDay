@@ -291,3 +291,48 @@ VALUES
     (2, 3, 'Confirmed'),
     (2, 5, 'Pending');
 GO
+/* ============================================================
+   VERIFICATION QUERIES
+   ============================================================ */
+
+SELECT * FROM Organisers;
+SELECT * FROM Participants;
+SELECT * FROM Venues;
+SELECT * FROM Events;
+SELECT * FROM Categories;
+SELECT * FROM EventCategories;
+SELECT * FROM Enrolments;
+GO
+
+/* Verify event and organiser relationships */
+SELECT
+    E.EventID,
+    E.EventName,
+    O.FirstName + ' ' + O.LastName AS OrganiserName,
+    V.VenueName,
+    E.EventDate,
+    E.Status
+FROM Events E
+INNER JOIN Organisers O
+    ON E.OrganiserID = O.OrganiserID
+INNER JOIN Venues V
+    ON E.VenueID = V.VenueID;
+GO
+
+/* Verify participant enrolments */
+SELECT
+    P.FirstName + ' ' + P.LastName AS ParticipantName,
+    E.EventName,
+    C.CategoryName,
+    EC.EntryFee,
+    EN.EnrolmentStatus
+FROM Enrolments EN
+INNER JOIN Participants P
+    ON EN.ParticipantID = P.ParticipantID
+INNER JOIN EventCategories EC
+    ON EN.EventCategoryID = EC.EventCategoryID
+INNER JOIN Events E
+    ON EC.EventID = E.EventID
+INNER JOIN Categories C
+    ON EC.CategoryID = C.CategoryID;
+GO
