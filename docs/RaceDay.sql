@@ -265,3 +265,17 @@ VALUES
     ('Half Marathon', 21.10, 18, NULL),
     ('Full Marathon', 42.20, 18, NULL);
 GO
+/* ============================================================
+   SAMPLE DATA - EVENT CATEGORIES
+   ============================================================ */
+
+INSERT INTO EventCategories
+    (EventID, CategoryID, EntryFee, MaximumEntries)
+VALUES
+    (1, 1, 100.00, 500),
+    (1, 2, 150.00, 400),
+    (2, 1, 80.00, 300),
+    (2, 2, 120.00, 250),
+    (3, 3, 250.00, 300),
+    (3, 4, 350.00, 200);
+GO
