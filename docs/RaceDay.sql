@@ -253,3 +253,15 @@ VALUES
      'A charity-focused marathon event.',
      '2027-01-17', '2027-01-03', 'Open');
 GO
+/* ============================================================
+   SAMPLE DATA - CATEGORIES
+   ============================================================ */
+
+INSERT INTO Categories
+    (CategoryName, DistanceKm, MinimumAge, MaximumAge)
+VALUES
+    ('5K Fun Run', 5.00, 13, NULL),
+    ('10K Road Race', 10.00, 16, NULL),
+    ('Half Marathon', 21.10, 18, NULL),
+    ('Full Marathon', 42.20, 18, NULL);
+GO
