@@ -42,7 +42,7 @@ Participants can:
 
 ## Database
 
-The RaceDay database will contain the following entities:
+The RaceDay database will contain the following seven entities:
 
 - Organisers
 - Participants
@@ -52,16 +52,49 @@ The RaceDay database will contain the following entities:
 - EventCategories
 - Enrolments
 
-The database design includes primary keys, foreign keys, unique
-constraints, check constraints and relationships between the entities.
+The database design includes:
 
-## Documentation
+- Primary keys
+- Foreign keys
+- Unique constraints
+- Check constraints
+- One-to-many relationships
+- A many-to-many relationship between Events and Categories
+- Sample data for testing
 
-The project documentation is stored in the `docs` folder.
+The `EventCategories` table resolves the many-to-many relationship
+between Events and Categories, while the `Enrolments` table records
+which participants have entered specific event categories.
 
-- [Entity Relationship Diagram](docs/ERD.md)
-- [API Endpoint Plan](docs/API-Endpoint-Plan.md)
-- [SQL Database Script](docs/RaceDay.sql)
+The complete database design is documented in
+[ERD.md](docs/ERD.md), and the complete SQL implementation is in
+[RaceDay.sql](docs/RaceDay.sql).
+
+## Project Validation
+
+The SQL script includes verification queries that can be executed in
+SQL Server Management Studio 2022 to confirm that:
+
+- All database tables are created successfully
+- Sample records are inserted successfully
+- Event and organiser relationships work correctly
+- Event and venue relationships work correctly
+- Participant enrolments are correctly connected to events and categories
+
+The database will be tested in SQL Server Management Studio before
+final submission.## Project Validation
+
+The SQL script includes verification queries that can be executed in
+SQL Server Management Studio 2022 to confirm that:
+
+- All database tables are created successfully
+- Sample records are inserted successfully
+- Event and organiser relationships work correctly
+- Event and venue relationships work correctly
+- Participant enrolments are correctly connected to events and categories
+
+The database will be tested in SQL Server Management Studio before
+final submission.
 
 ## CI/CD
 
