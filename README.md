@@ -103,8 +103,8 @@ project whenever changes are pushed to the repository.
 
 ### Successful CI/CD Build
 
-The successful GitHub Actions build screenshot will be added here
-after the CI/CD workflow has been configured and successfully executed.
+The RaceDay GitHub Actions workflow successfully validates the project
+structure, documentation and SQL script.
 
 ![Successful GitHub Actions Build](docs/images/ci-green-build.png)
 
