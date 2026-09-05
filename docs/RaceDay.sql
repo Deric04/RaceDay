@@ -65,3 +65,52 @@ CREATE TABLE Participants
         UNIQUE (Email)
 );
 GO
+/* ============================================================
+   3. VENUES
+   ============================================================ */
+
+CREATE TABLE Venues
+(
+    VenueID INT IDENTITY(1,1) NOT NULL,
+    VenueName NVARCHAR(100) NOT NULL,
+    Address NVARCHAR(255) NOT NULL,
+    City NVARCHAR(100) NOT NULL,
+
+    CONSTRAINT PK_Venues
+        PRIMARY KEY (VenueID)
+);
+GO
+
+/* ============================================================
+   4. EVENTS
+   ============================================================ */
+
+CREATE TABLE Events
+(
+    EventID INT IDENTITY(1,1) NOT NULL,
+    OrganiserID INT NOT NULL,
+    VenueID INT NOT NULL,
+    EventName NVARCHAR(150) NOT NULL,
+    EventDescription NVARCHAR(500) NULL,
+    EventDate DATE NOT NULL,
+    RegistrationDeadline DATE NOT NULL,
+    Status NVARCHAR(30) NOT NULL DEFAULT 'Open',
+
+    CONSTRAINT PK_Events
+        PRIMARY KEY (EventID),
+
+    CONSTRAINT FK_Events_Organisers
+        FOREIGN KEY (OrganiserID)
+        REFERENCES Organisers(OrganiserID),
+
+    CONSTRAINT FK_Events_Venues
+        FOREIGN KEY (VenueID)
+        REFERENCES Venues(VenueID),
+
+    CONSTRAINT CK_Events_Status
+        CHECK (Status IN ('Open', 'Closed', 'Cancelled', 'Completed')),
+
+    CONSTRAINT CK_Events_Dates
+        CHECK (RegistrationDeadline <= EventDate)
+);
+GO
