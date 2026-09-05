@@ -223,3 +223,13 @@ VALUES
     ('Thabo', 'Dlamini', 'thabo.dlamini@example.com', '0821234567', '1998-05-14'),
     ('Lerato', 'Khumalo', 'lerato.khumalo@example.com', '0839876543', '2002-11-23');
 GO
+/* ============================================================
+   SAMPLE DATA - VENUES
+   ============================================================ */
+
+INSERT INTO Venues
+    (VenueName, Address, City)
+VALUES
+    ('Cape Town Stadium', 'Fritz Sonnenberg Road, Green Point', 'Cape Town'),
+    ('Durban Athletics Stadium', 'Walter Gilbert Road, Kings Park', 'Durban');
+GO
