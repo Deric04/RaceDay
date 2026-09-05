@@ -213,3 +213,13 @@ VALUES
     ('Sarah', 'Mokoena', 'sarah.mokoena@raceday.com', 'HASH_SARAH_123'),
     ('James', 'Naidoo', 'james.naidoo@raceday.com', 'HASH_JAMES_123');
 GO
+/* ============================================================
+   SAMPLE DATA - PARTICIPANTS
+   ============================================================ */
+
+INSERT INTO Participants
+    (FirstName, LastName, Email, Phone, DateOfBirth)
+VALUES
+    ('Thabo', 'Dlamini', 'thabo.dlamini@example.com', '0821234567', '1998-05-14'),
+    ('Lerato', 'Khumalo', 'lerato.khumalo@example.com', '0839876543', '2002-11-23');
+GO
