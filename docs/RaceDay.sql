@@ -233,3 +233,23 @@ VALUES
     ('Cape Town Stadium', 'Fritz Sonnenberg Road, Green Point', 'Cape Town'),
     ('Durban Athletics Stadium', 'Walter Gilbert Road, Kings Park', 'Durban');
 GO
+/* ============================================================
+   SAMPLE DATA - EVENTS
+   ============================================================ */
+
+INSERT INTO Events
+    (OrganiserID, VenueID, EventName, EventDescription,
+     EventDate, RegistrationDeadline, Status)
+VALUES
+    (1, 1, 'Cape Town City Run',
+     'A scenic road race through Cape Town.',
+     '2026-11-15', '2026-11-01', 'Open'),
+
+    (1, 2, 'Durban Beach Run',
+     'A coastal running event along Durban.',
+     '2026-12-06', '2026-11-22', 'Open'),
+
+    (2, 1, 'Summer Charity Marathon',
+     'A charity-focused marathon event.',
+     '2027-01-17', '2027-01-03', 'Open');
+GO
