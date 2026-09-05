@@ -114,3 +114,62 @@ CREATE TABLE Events
         CHECK (RegistrationDeadline <= EventDate)
 );
 GO
+/* ============================================================
+   5. CATEGORIES
+   ============================================================ */
+
+CREATE TABLE Categories
+(
+    CategoryID INT IDENTITY(1,1) NOT NULL,
+    CategoryName NVARCHAR(100) NOT NULL,
+    DistanceKm DECIMAL(5,2) NOT NULL,
+    MinimumAge INT NOT NULL DEFAULT 0,
+    MaximumAge INT NULL,
+
+    CONSTRAINT PK_Categories
+        PRIMARY KEY (CategoryID),
+
+    CONSTRAINT CK_Categories_Distance
+        CHECK (DistanceKm > 0),
+
+    CONSTRAINT CK_Categories_MinAge
+        CHECK (MinimumAge >= 0),
+
+    CONSTRAINT CK_Categories_MaxAge
+        CHECK (MaximumAge IS NULL OR MaximumAge >= MinimumAge)
+);
+GO
+
+/* ============================================================
+   6. EVENT CATEGORIES
+   ============================================================ */
+
+CREATE TABLE EventCategories
+(
+    EventCategoryID INT IDENTITY(1,1) NOT NULL,
+    EventID INT NOT NULL,
+    CategoryID INT NOT NULL,
+    EntryFee DECIMAL(10,2) NOT NULL,
+    MaximumEntries INT NOT NULL,
+
+    CONSTRAINT PK_EventCategories
+        PRIMARY KEY (EventCategoryID),
+
+    CONSTRAINT FK_EventCategories_Events
+        FOREIGN KEY (EventID)
+        REFERENCES Events(EventID),
+
+    CONSTRAINT FK_EventCategories_Categories
+        FOREIGN KEY (CategoryID)
+        REFERENCES Categories(CategoryID),
+
+    CONSTRAINT UQ_EventCategories
+        UNIQUE (EventID, CategoryID),
+
+    CONSTRAINT CK_EventCategories_EntryFee
+        CHECK (EntryFee >= 0),
+
+    CONSTRAINT CK_EventCategories_MaxEntries
+        CHECK (MaximumEntries > 0)
+);
+GO
