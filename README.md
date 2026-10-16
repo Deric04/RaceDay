@@ -1,48 +1,49 @@
 # RaceDay
 
-## System Description
+## 1. System Description
 
-RaceDay is a race event management system designed to help organisers
-create and manage running events while allowing participants to view
-available races and enrol in race categories.
+RaceDay is a race event management system designed to help organisers create and manage running events while allowing participants to view available races and enter events.
 
-The system will use a Microsoft SQL Server relational database and a
-RESTful API to manage race events, participants, categories and
-enrolments.
+The system uses a RESTful API, ASP.NET Core, Entity Framework Core and Microsoft SQL Server. Swagger is used to document and test the API, while GitHub Actions automatically builds the project and runs unit tests.
 
-## User Roles
+## 2. User Roles and Permissions
 
 ### Organiser
 
-An Organiser is responsible for managing race events.
+Organisers manage race events. Authenticated Organiser accounts can:
 
-Organisers can:
+- View available events and event details.
+- Create race events.
+- Update existing race events.
+- Delete race events.
 
-- Create race events
-- Update race events
-- Cancel race events
-- Create and manage race categories
-- Add categories to events
-- View participants enrolled in their events
+Organiser-only operations require authentication and the Organiser role.
 
 ### Participant
 
-A Participant is a user who enters races through the RaceDay system.
+Participants use the system to access race information. Participants can:
 
-Participants can:
+- Register an account.
+- Log in securely.
+- View available events.
+- View individual event details.
 
-- Register an account
-- Log in
-- View available events
-- View event details
-- View race categories
-- Enrol in a race
-- View their enrolments
-- Cancel their enrolment
+Participant accounts cannot perform Organiser-only event management operations.
 
-## Database
+## 3. Technologies Used
 
-The RaceDay database will contain the following seven entities:
+- **C#:** Main programming language.
+- **ASP.NET Core Web API:** Provides the REST API.
+- **Entity Framework Core:** Handles database access.
+- **Microsoft SQL Server:** Stores application data.
+- **JWT authentication:** Secures authenticated API requests.
+- **Swagger:** Documents and tests API endpoints.
+- **xUnit:** Used for automated unit tests.
+- **GitHub Actions:** Automates the build and test process.
+
+## 4. Database Design
+
+The RaceDay database design includes seven entities:
 
 - Organisers
 - Participants
@@ -52,66 +53,109 @@ The RaceDay database will contain the following seven entities:
 - EventCategories
 - Enrolments
 
-The database design includes:
+The database design uses primary keys, foreign keys, constraints and relationships to maintain data integrity. The EventCategories entity supports the many-to-many relationship between events and categories, while Enrolments records participant entries into event categories.
 
-- Primary keys
-- Foreign keys
-- Unique constraints
-- Check constraints
-- One-to-many relationships
-- A many-to-many relationship between Events and Categories
-- Sample data for testing
+The database documentation and SQL script are available here:
 
-The `EventCategories` table resolves the many-to-many relationship
-between Events and Categories, while the `Enrolments` table records
-which participants have entered specific event categories.
+- [Entity Relationship Diagram and database design](docs/ERD.md)
+- [SQL database script](docs/RaceDay.sql)
+- [API Endpoint Plan](docs/API-Endpoint-Plan.md)
 
-The complete database design is documented in
-[ERD.md](docs/ERD.md), and the complete SQL implementation is in
-[RaceDay.sql](docs/RaceDay.sql).
+## 5. Authentication and Security
 
-## Project Validation
+The API supports account registration and login. Passwords are hashed rather than stored as plain text, and successful login generates a JSON Web Token (JWT).
 
-The SQL script includes verification queries that can be executed in
-SQL Server Management Studio 2022 to confirm that:
+Protected endpoints require a valid authentication token. Role-based authorisation restricts event creation, updating and deletion to Organiser accounts.
 
-- All database tables are created successfully
-- Sample records are inserted successfully
-- Event and organiser relationships work correctly
-- Event and venue relationships work correctly
-- Participant enrolments are correctly connected to events and categories
+JWT signing keys and other sensitive configuration values must be supplied through local user secrets or suitable environment variables. Real credentials and signing keys must not be committed to the public repository.
 
-The database will be tested in SQL Server Management Studio before
-final submission.## Project Validation
+## 6. API Endpoints
 
-The SQL script includes verification queries that can be executed in
-SQL Server Management Studio 2022 to confirm that:
+The implemented event endpoints include:
 
-- All database tables are created successfully
-- Sample records are inserted successfully
-- Event and organiser relationships work correctly
-- Event and venue relationships work correctly
-- Participant enrolments are correctly connected to events and categories
+| Method | Endpoint | Access |
+|---|---|---|
+| GET | `/api/events` | Public |
+| GET | `/api/events/{id}` | Public |
+| POST | `/api/events` | Organiser |
+| PUT | `/api/events/{id}` | Organiser |
+| DELETE | `/api/events/{id}` | Organiser |
 
-The database will be tested in SQL Server Management Studio before
-final submission.
+The authentication endpoints support participant registration and login. Consult the API Endpoint Plan and Swagger documentation for the available routes and request formats.
 
-## CI/CD
+## 7. Requirements
 
-GitHub Actions will be used to automatically validate the RaceDay
-project whenever changes are pushed to the repository.
+Before running the project, install:
 
-### Successful CI/CD Build
+- .NET 10 SDK
+- Visual Studio 2022 or a compatible development environment
+- Microsoft SQL Server and SQL Server Management Studio
+- Git
 
-The RaceDay GitHub Actions workflow successfully validates the project
-structure, documentation and SQL script.
+## 8. Setup and Running Instructions
+
+1. Clone or download the RaceDay repository from GitHub:
+
+   `https://github.com/Deric04/RaceDay`
+
+2. Open the solution or project files in Visual Studio 2022.
+
+3. Confirm that SQL Server is running and that the `RaceDay` database is available. Configure the database connection string in the appropriate local configuration.
+
+4. Configure the JWT settings using local user secrets or environment variables. Do not add production signing keys to `appsettings.json` or commit them to GitHub.
+
+5. Open a terminal in the project folder and restore the dependencies:
+
+   ```powershell
+   dotnet restore RaceDay.Tests/RaceDay.Tests.csproj
+   ```
+
+6. Build the API:
+
+   ```powershell
+   dotnet build RaceDay.Api/RaceDay.Api.csproj
+   ```
+
+7. Run the API from Visual Studio or by using:
+
+   ```powershell
+   dotnet run --project RaceDay.Api/RaceDay.Api.csproj
+   ```
+
+8. Open the Swagger URL shown in the terminal or browser launch settings to explore and test the API endpoints.
+
+## 9. Testing
+
+Automated tests are located in `RaceDay.Tests`. They test API behaviour, including access restrictions for different user roles.
+
+To run the tests locally, use:
+
+```powershell
+dotnet test RaceDay.Tests/RaceDay.Tests.csproj
+```
+
+The expected result is that all four automated tests pass.
+
+API access checks should also confirm that unauthenticated requests to protected endpoints are rejected, Participant requests to Organiser-only endpoints are forbidden, and authorised Organiser requests can create events.
+
+## 10. GitHub Actions CI/CD
+
+GitHub Actions automatically checks the project documentation, restores dependencies, builds the API and test projects, and runs the automated tests when changes are pushed or a pull request is opened.
+
+### Successful CI Build
+
+The screenshot below provides evidence of a successful GitHub Actions workflow.
 
 ![Successful GitHub Actions Build](docs/images/ci-green-build.png)
 
-## Video
+Additional testing evidence is stored in `docs/images`, including the successful test run and screenshots showing authentication and role-based access results.
 
-An unlisted YouTube video explaining the RaceDay system, ERD,
-API Endpoint Plan, SQL script, database execution and GitHub
-Actions CI/CD will be added here.
+## 11. Video Demonstration
 
-**YouTube Video:** To be added after completion.
+The video demonstration will explain the system, database design, API endpoints, authentication, role-based access, Swagger testing, automated unit tests and GitHub Actions workflow.
+
+**Unlisted YouTube video:** Replace this line with the actual unlisted YouTube URL before submitting the assignment.
+
+## 12. Repository
+
+GitHub repository: https://github.com/Deric04/RaceDay
