@@ -1,7 +1,9 @@
+
 using Microsoft.EntityFrameworkCore;
 using RaceDay.Api.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,24 +13,33 @@ builder.Services.AddControllers();
 var jwtKey = builder.Configuration["Jwt:Key"]
     ?? throw new InvalidOperationException("JWT Key is missing.");
 
-var jwtIssuer = builder.Configuration["Jwt:Issuer"];
-var jwtAudience = builder.Configuration["Jwt:Audience"];
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]
+    ?? throw new InvalidOperationException("JWT Issuer is missing.");
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
+var jwtAudience = builder.Configuration["Jwt:Audience"]
+    ?? throw new InvalidOperationException("JWT Audience is missing.");
+
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
     {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = jwtIssuer,
-        ValidAudience = jwtAudience,
-        IssuerSigningKey = new SymmetricSecurityKey(
-    Encoding.UTF8.GetBytes(jwtKey))
-    };
-});
+        options.MapInboundClaims = false;
+
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = jwtIssuer,
+            ValidAudience = jwtAudience,
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(jwtKey)),
+            NameClaimType = ClaimTypes.Name,
+            RoleClaimType = "role",
+            ClockSkew = TimeSpan.FromMinutes(1)
+        };
+    });
 
 builder.Services.AddAuthorization();
 builder.Services.AddEndpointsApiExplorer();
@@ -54,12 +65,11 @@ builder.Services.AddSwaggerGen(options =>
         });
 });
 
-
 var connectionString = builder.Configuration
-.GetConnectionString("RaceDayConnection");
+    .GetConnectionString("RaceDayConnection");
 
 builder.Services.AddDbContext<RaceDayDbContext>(options =>
-options.UseSqlServer(connectionString));
+    options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 
@@ -94,10 +104,10 @@ app.MapGet("/api/health/database", async (RaceDayDbContext db) =>
         return Results.Problem(
             "Database connection failed. Check the SQL Server connection settings.");
     }
-
 });
 
 app.MapControllers();
 
 app.Run();
+
 public partial class Program { }
