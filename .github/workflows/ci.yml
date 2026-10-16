@@ -38,4 +38,4 @@ jobs:
         run: dotnet build RaceDay.Tests/RaceDay.Tests.csproj --configuration Release --no-restore
 
       - name: Run unit tests
-        run: dotnet test RaceDay.Tests/RaceDay.Tests.csproj --configuration Release --no-build --logger "console;verbosity=normal"
+       run: dotnet test RaceDay.Tests/RaceDay.Tests.csproj --configuration Release --logger "console;verbosity=detailed"
